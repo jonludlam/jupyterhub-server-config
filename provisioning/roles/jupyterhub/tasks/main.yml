@@ -1,0 +1,23 @@
+---
+- name: Install apt packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - python3
+    - python3-pip
+    - npm
+    - nodejs
+
+- name: Install http-proxy npm package globally
+  npm:
+    name: configurable-http-proxy
+    global: yes
+
+- pip:
+    executable: pip3
+    name:
+      - jupyterhub
+      - notebook
+      - dockerspawner
+
