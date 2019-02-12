@@ -1,0 +1,17 @@
+---
+- name: Update apt
+  apt:
+    update_cache: yes
+    upgrade: yes
+
+- name: Add the certbot repository
+  apt_repository:
+    repo: ppa:certbot/certbot
+
+- name: Install apt packages
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+    - certbot

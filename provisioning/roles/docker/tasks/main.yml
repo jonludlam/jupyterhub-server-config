@@ -27,8 +27,8 @@
     packages:
     - docker-ce
 
-- name: Add vagrant to the docker group
+- name: Add me to the docker group
   user:
-    name: vagrant
-    group: vagrant
+    name: jjl25
+    append: yes
     groups: docker

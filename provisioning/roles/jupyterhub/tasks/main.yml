@@ -6,8 +6,10 @@
     packages:
     - python3
     - python3-pip
+    - python-pip
     - npm
     - nodejs
+    - git
 
 - name: Install http-proxy npm package globally
   npm:
@@ -17,7 +19,60 @@
 - pip:
     executable: pip3
     name:
-      - jupyterhub
-      - notebook
-      - dockerspawner
+      - jupyterhub==0.9.4
+      - notebook==5.7.4
+      - dockerspawner==0.10.0
+      - oauthenticator==0.8.0
+      - git+git://github.com/PyCav/jupyterhub-raven-auth.git
 
+- name: Add the jupyterhub groups
+  group:
+    name: "jupyterhub-admins"
+    state: present
+
+- name: Add the users group
+  group:
+    name: "jupyterhub-users"
+    state: present
+
+- name: Add admin users
+  user:
+    name: jjl25
+    append: true
+    groups: jupyterhub-admins,jupyterhub-users
+
+- name: Create jupyterhub configuration dir
+  file:
+    path: /opt/jupyterhub
+    state: directory
+    owner: jjl25
+    group: jupyterhub-admins
+    mode: 0775
+
+- name: Create the missing raven form dir
+  file:
+    path: /usr/local/lib/python3.6/dist-packages/raven_auth/files
+    state: directory
+    owner: root
+    group: staff
+    mode: 0775
+
+- name: Copy jupyterhub configuration
+  copy:
+    src: files/jupyterhub_config.py
+    dest: /opt/jupyterhub
+
+- name: Copy origami camel
+  copy:
+    src: files/origami-camel.png
+    dest: /opt/jupyterhub
+
+- name: Copy Raven
+  copy:
+    src: files/raven.png
+    dest: /opt/jupyterhub
+
+- name: Copy form
+  copy:
+    src: files/form.html
+    dest: /usr/local/lib/python3.6/dist-packages/raven_auth/files/form.html
